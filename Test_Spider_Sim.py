@@ -1,6 +1,28 @@
 import unittest
 import Spider_Sim
 
+class Test_Card(unittest.TestCase):
+
+    def test_card_accending(self):
+
+        card_1 = Spider_Sim.Card(1, 0)
+
+        card_2 = Spider_Sim.Card(2, 0)
+
+        self.assertRaises(TypeError, card_1.accending(2))
+
+        self.assertTrue(card_1.accending(card_2))
+
+    def test_card_descending(self):
+
+        card_1 = Spider_Sim.Card(1, 0)
+
+        card_2 = Spider_Sim.Card(2, 0)
+
+        self.assertRaises(TypeError, card_1.descending(2))
+
+        self.assertTrue(card_2.descending(card_1))
+
 class Test_Stack(unittest.TestCase):
 
     def test_stack_pull(self):
@@ -82,6 +104,7 @@ if __name__ == "__main__":
 
     suite = unittest.TestSuite()
 
+    suite.addTest(unittest.makeSuite(Test_Card))
     suite.addTest(unittest.makeSuite(Test_Stack))
     suite.addTest(unittest.makeSuite(Test_Deck))
     suite.addTest(unittest.makeSuite(Test_Table))

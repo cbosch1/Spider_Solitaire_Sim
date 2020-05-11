@@ -43,14 +43,17 @@ class Card(object):
 
         return self.number
 
-    def decending(self, card):
+    def descending(self, card):
         """Compares self to Card object, 
         returns True if card is of same suit, and number of card is one less than self.
         """
+        if type(card) != type(Card(0, 0)):
+
+            return TypeError("Card must be compared with another card object")
 
         if self.suit == card.get_suit():
 
-            if self.number == card.get_number() - 1:
+            if self.number == card.get_number() + 1:
 
                 return True
 
@@ -60,10 +63,13 @@ class Card(object):
         """Compares self to Card object, 
         returns True if card is of same suit, and number of card is one more than self.
         """
+        if type(card) != type(Card(0, 0)):
+
+            return TypeError("Card must be compared with another card object")
 
         if self.suit == card.get_suit():
 
-            if self.number == card.get_number() + 1:
+            if self.number == card.get_number() - 1:
 
                 return True
 
@@ -96,7 +102,7 @@ class Stack(object):
 
             next_card = pull_stack[len(pull_stack) - 1]
 
-            if next_card.decending(current_card):
+            if next_card.accending(current_card):
 
                 pull_stack.append(current_card)
 
