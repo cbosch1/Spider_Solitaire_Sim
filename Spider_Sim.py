@@ -12,6 +12,17 @@ Structure:
 
 """
 
+class CannotPlaceError(Exception):
+
+    """Exception raised for when a stack move cannot place any cards.
+
+    Attributes:
+        message -- explanation of the error
+    """
+
+    def __init__(self, message):
+        self.message = message
+
 class Card(object):
     """Object that allows easy cross comparison
     Number takes int, Suit takes int"""
@@ -85,7 +96,7 @@ class Card(object):
 class Stack(object):
     """ Contains a list of cards and methods to change that list. """
 
-    def __init__(self, cards, hidden):
+    def __init__(self, cards, hidden=False):
         """ Assumes cards are a tuple of int Card Number and string Suit """
         self.cards = cards
         self.hidden = hidden
@@ -128,8 +139,23 @@ class Stack(object):
         raise Cannot_Place if cards do not match up 
         Returns none """
 
-        #TODO: Stack.Place
-        pass
+        for i in range(len(cards)):
+
+            card_added = False
+
+            current_card = cards.pop(len(cards) - 1)
+
+            bottom_stack = self.cards[len(self.cards) - 1]
+
+            if bottom_stack.descending(current_card):
+
+                self.cards.append(current_card)
+
+                card_added = True
+
+            elif not card_added:
+
+                raise CannotPlaceError("Cannot place cards on stack")
 
 class Deck(object):
     """ Contains a list of cards and methods to randomly return cards from said list. """
