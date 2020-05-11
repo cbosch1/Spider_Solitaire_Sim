@@ -1,3 +1,4 @@
+import random
 """ Spider Solitaire Simulator
 Step 1 - A program that will simulate Spider Solitaire
 Step 2 - A program that will run tests on the simulated Spider Solitaire
@@ -207,12 +208,26 @@ class Deck(object):
         return cards
 
 
-    def Deal(self, num_cards, seed):
+    def Deal(self, num_cards, seed=-1):
         """ Assumes num_cards is int
         Pops a number of cards randomly picked off own list
         Returns those cards as list"""
 
-        #TODO: Deck.Deal
+        if seed != -1:
+            
+            random.seed(seed)
+
+        cards = []
+
+        for i in range(num_cards):
+
+            end = len(self.cards) - 1
+
+            if end != 0:
+                
+                cards.append(self.cards.pop(random.randint(0, end)))
+
+        return cards
 
 class Table(object):
     """ Contains a list of stacks and a Deck, performs operations to play the game. """

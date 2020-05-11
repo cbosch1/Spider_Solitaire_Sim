@@ -107,9 +107,14 @@ class Test_Deck(unittest.TestCase):
 
         deck = Spider_Sim.Deck(1)
 
-        card = deck.Deal(1, 0)
+        cards = deck.Deal(1, 0)
+        self.assertEqual([Spider_Sim.Card(10, 0)], cards)
 
-        self.assertEqual([Spider_Sim.Card(1, 0)], card)
+        cards = deck.Deal(4, 0)
+        self.assertEqual([Spider_Sim.Card(11, 0), Spider_Sim.Card(8, 0), Spider_Sim.Card(3, 0), Spider_Sim.Card(5, 0)], cards)
+
+        deck = Spider_Sim.Deck(1)
+        cards = deck.Deal(len(deck.cards))
 
 class Test_Table(unittest.TestCase):
 
