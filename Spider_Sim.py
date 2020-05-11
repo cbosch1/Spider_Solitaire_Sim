@@ -202,12 +202,12 @@ class Deck(object):
 
         for card_num in range(13):
 
-            cards.append((card_num, suit))
+            cards.append(Card(card_num, suit))
 
         return cards
 
 
-    def Deal(self, num_cards):
+    def Deal(self, num_cards, seed):
         """ Assumes num_cards is int
         Pops a number of cards randomly picked off own list
         Returns those cards as list"""

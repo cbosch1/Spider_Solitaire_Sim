@@ -49,7 +49,7 @@ class Test_Stack(unittest.TestCase):
 
         wrong_card_suit = [Spider_Sim.Card(3, 1)]
         wrong_card_number = [Spider_Sim.Card(4, 0)]
-        
+
         raise_stack = Spider_Sim.Stack([Spider_Sim.Card(4, 0)])
 
         self.assertRaises(Spider_Sim.CannotPlaceError, raise_stack.Place, wrong_card_suit)
@@ -65,31 +65,31 @@ class Test_Deck(unittest.TestCase):
 
         for card in low_deck.cards:
 
-            self.assertEqual(card[1], 0)
+            self.assertEqual(card.get_suit(), 0)
 
         for card in medium_deck.cards:
 
-            try: self.assertEqual(card[1], 0)
+            try: self.assertEqual(card.get_suit(), 0)
 
             except(AssertionError): 
                 
-                self.assertEqual(card[1], 1)
+                self.assertEqual(card.get_suit(), 1)
 
         for card in full_deck.cards:
 
-            try: self.assertEqual(card[1], 0)
+            try: self.assertEqual(card.get_suit(), 0)
 
             except(AssertionError):
 
-                try: self.assertEqual(card[1], 1)
+                try: self.assertEqual(card.get_suit(), 1)
 
                 except(AssertionError):
 
-                    try: self.assertEqual(card[1], 2)
+                    try: self.assertEqual(card.get_suit(), 2)
                         
                     except(AssertionError):
                         
-                        self.assertEqual(card[1], 3)
+                        self.assertEqual(card.get_suit(), 3)
 
     def test_generate_suit(self):
 
@@ -99,13 +99,17 @@ class Test_Deck(unittest.TestCase):
 
         for card in suit:
 
-            self.assertTupleEqual((i, 0), card)
+            self.assertEqual(Spider_Sim.Card(i, 0), card)
 
             i += 1
 
     def test_deck_deal(self):
 
-        self.assertEqual(1, 2)
+        deck = Spider_Sim.Deck(1)
+
+        card = deck.Deal(1, 0)
+
+        self.assertEqual([Spider_Sim.Card(1, 0)], card)
 
 class Test_Table(unittest.TestCase):
 
