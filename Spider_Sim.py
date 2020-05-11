@@ -12,6 +12,64 @@ Structure:
 
 """
 
+class Card(object):
+    """Object that allows easy cross comparison
+    Number takes int, Suit takes int"""
+
+    def __init__(self, number, suit):
+
+        self.number = number
+        self.suit = suit
+
+    def __eq__(self, card):
+
+        if type(card) != type(Card(0, 0)):
+
+            return TypeError("Card must be compared with another card object")
+
+        if self.suit == card.get_suit():
+
+            if self.number == card.get_number():
+
+                return True
+
+        return False
+
+    def get_suit(self):
+
+        return self.suit
+
+    def get_number(self):
+
+        return self.number
+
+    def decending(self, card):
+        """Compares self to Card object, 
+        returns True if card is of same suit, and number of card is one less than self.
+        """
+
+        if self.suit == card.get_suit():
+
+            if self.number == card.get_number() - 1:
+
+                return True
+
+        return False
+
+    def accending(self, card):
+        """Compares self to Card object, 
+        returns True if card is of same suit, and number of card is one more than self.
+        """
+
+        if self.suit == card.get_suit():
+
+            if self.number == card.get_number() + 1:
+
+                return True
+
+        return False
+        
+
 class Stack(object):
     """ Contains a list of cards and methods to change that list. """
 
@@ -21,10 +79,36 @@ class Stack(object):
         self.hidden = hidden
 
     def Pull(self):
-        """ Returns list of cards that are of the same suit and in order """
+        """ Returns a reversed list of cards that are of the same suit and in order """
 
-        #TODO: Stack.Pull
-        pass
+        pull_stack = []
+
+        for i in range(len(self.cards)):
+
+            card_added = False
+            current_card = self.cards.pop(len(self.cards) - 1)
+
+            if len(pull_stack) == 0:
+                
+                pull_stack.append(current_card)
+
+                card_added = True
+
+            next_card = pull_stack[len(pull_stack) - 1]
+
+            if next_card.decending(current_card):
+
+                pull_stack.append(current_card)
+
+                card_added = True
+
+            if card_added == False:
+
+                self.cards.append(current_card)
+
+                return pull_stack
+            
+        return pull_stack
 
     def Place(self, cards):
         """Assumes cards is list of Card and either

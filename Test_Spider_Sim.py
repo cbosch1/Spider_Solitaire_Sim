@@ -3,13 +3,14 @@ import Spider_Sim
 
 class Test_Stack(unittest.TestCase):
 
-    def test_stack_constructor(self):
-
-        self.assertEqual(1, 2)
-
     def test_stack_pull(self):
 
-        self.assertEqual(1, 2)
+        stack = Spider_Sim.Stack([Spider_Sim.Card(10, 0), Spider_Sim.Card(9, 0), Spider_Sim.Card(8, 2), 
+                                  Spider_Sim.Card(7, 0), Spider_Sim.Card(6, 0)], False)
+
+        pull_stack = stack.Pull()
+
+        self.assertEqual([Spider_Sim.Card(6, 0), Spider_Sim.Card(7, 0)], pull_stack)
 
     def test_stack_place(self):
 
