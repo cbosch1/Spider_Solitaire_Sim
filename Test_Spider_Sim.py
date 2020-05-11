@@ -36,7 +36,19 @@ class Test_Stack(unittest.TestCase):
 
     def test_stack_place(self):
 
-        self.assertEqual(1, 2)
+        stack = Spider_Sim.Stack([Spider_Sim.Card(10, 0), Spider_Sim.Card(9, 0), Spider_Sim.Card(8, 2), 
+                                  Spider_Sim.Card(7, 0), Spider_Sim.Card(6, 0)], False)
+
+        place_stack = Spider_Sim.Stack([Spider_Sim.Card(10, 0), Spider_Sim.Card(9, 0), Spider_Sim.Card(8, 2), 
+                                        Spider_Sim.Card(5, 0), Spider_Sim.Card(4, 0)], False)
+
+        moving_cards = place_stack.Pull()
+
+        stack.Place(moving_cards)
+
+        self.assertEqual([Spider_Sim.Card(10, 0), Spider_Sim.Card(9, 0), Spider_Sim.Card(8, 2), Spider_Sim.Card(7, 0), 
+                          Spider_Sim.Card(6, 0), Spider_Sim.Card(5, 0), Spider_Sim.Card(4, 0)],
+                          stack.cards)
 
 class Test_Deck(unittest.TestCase):
 

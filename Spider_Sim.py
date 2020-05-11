@@ -21,6 +21,12 @@ class Card(object):
         self.number = number
         self.suit = suit
 
+    def __str__(self):
+
+        string = "Number:" + str(self.get_number()) + ", Suit:" + str(self.get_suit())
+
+        return string
+
     def __eq__(self, card):
 
         if type(card) != type(Card(0, 0)):
