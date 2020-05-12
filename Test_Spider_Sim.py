@@ -105,13 +105,13 @@ class Test_Deck(unittest.TestCase):
 
     def test_deck_deal(self):
 
-        deck = Spider_Sim.Deck(1)
+        deck = Spider_Sim.Deck(1, 1)
 
-        cards = deck.Deal(1, 0)
-        self.assertEqual([Spider_Sim.Card(10, 0)], cards)
+        cards = deck.Deal(1)
+        self.assertEqual([Spider_Sim.Card(4, 0)], cards)
 
-        cards = deck.Deal(4, 0)
-        self.assertEqual([Spider_Sim.Card(11, 0), Spider_Sim.Card(8, 0), Spider_Sim.Card(3, 0), Spider_Sim.Card(5, 0)], cards)
+        cards = deck.Deal(4)
+        self.assertEqual([Spider_Sim.Card(5, 0), Spider_Sim.Card(9, 0), Spider_Sim.Card(9, 0), Spider_Sim.Card(8, 0)], cards)
 
         deck = Spider_Sim.Deck(1)
         cards = deck.Deal(len(deck.cards))
@@ -120,11 +120,71 @@ class Test_Table(unittest.TestCase):
 
     def test_table_constructor(self):
 
-        self.assertEqual(1, 2)
+        table = Spider_Sim.Table(1)
+
+        self.assertEqual(len(table.stacks), 20)
+
+        i = 0
+        while i < 10:
+
+            self.assertEqual(table.stacks["O" + str(i)].Length_Check(), 1)
+
+            if i < 4:
+
+                self.assertEqual(table.stacks["H" + str(i)].Length_Check(), 5)
+
+            else:
+
+                self.assertEqual(table.stacks["H" + str(i)].Length_Check(), 4)
+
+            i += 1
 
     def test_table_spider_deal(self):
 
-        self.assertEqual(1, 2)
+        table = Spider_Sim.Table(1)
+
+        table.Spider_Deal()
+
+        i = 0
+        while i < 10:
+
+            self.assertEqual(table.stacks["O" + str(i)].Length_Check(), 2)
+
+            if i < 4:
+
+                self.assertEqual(table.stacks["H" + str(i)].Length_Check(), 5)
+
+            else:
+
+                self.assertEqual(table.stacks["H" + str(i)].Length_Check(), 4)
+
+            i += 1
+
+        card = table.stacks["O1"].Pop_Card()
+        card = table.stacks["O1"].Pop_Card()
+
+        self.assertRaises(Spider_Sim.StackEmptyError, table.Spider_Deal)
+
+
+    def test_table_Move(self):
+
+        try:
+
+            table = Spider_Sim.Table(1, 1)
+
+            table.Move("4", "1")
+
+            self.assertEqual(table.stacks["O4"].Length_Check(), 1)
+            self.assertEqual(table.stacks["O1"].Length_Check(), 2)
+            self.assertEqual(table.stacks["H4"].Length_Check(), 3)
+            move_successful = True
+
+        except(Spider_Sim.CannotPlaceError):
+
+            self.assertEqual(table.stacks["O4"].Length_Check(), 1)
+            self.assertEqual(table.stacks["O1"].Length_Check(), 1)
+            self.assertEqual(table.stacks["H4"].Length_Check(), 4)
+
 
 if __name__ == "__main__":
 

@@ -6,7 +6,7 @@ Step 3 - Profit
 
 Structure:
 
-    Card = (int #, 'Suit')
+    Card = int card_# + int card_suit + Methods
     Stack = [Cards] + Methods
     Deck = [Cards] + Methods
     Table = Deck, [Stacks], + Methods
@@ -16,6 +16,17 @@ Structure:
 class CannotPlaceError(Exception):
 
     """Exception raised for when a stack move cannot place any cards.
+
+    Attributes:
+        message -- explanation of the error
+    """
+
+    def __init__(self, message):
+        self.message = message
+
+class StackEmptyError(Exception):
+
+    """Exception raised for when a deal cannot place a card on an empty stack.
 
     Attributes:
         message -- explanation of the error
@@ -65,7 +76,7 @@ class Card(object):
         """Compares self to Card object, 
         returns True if card is of same suit, and number of card is one less than self.
         """
-        if type(card) != type(Card(0, 0)):
+        if not isinstance(card, Card):
 
             return TypeError("Card must be compared with another card object")
 
@@ -81,7 +92,7 @@ class Card(object):
         """Compares self to Card object, 
         returns True if card is of same suit, and number of card is one more than self.
         """
-        if type(card) != type(Card(0, 0)):
+        if not isinstance(card, Card):
 
             return TypeError("Card must be compared with another card object")
 
@@ -158,15 +169,43 @@ class Stack(object):
 
                 raise CannotPlaceError("Cannot place cards on stack")
 
+    def Add_Card(self, card):
+
+        if isinstance(card, Card):
+
+            self.cards.append(card)
+
+    def Pop_Card(self):
+        """Returns last card as it is poped off list"""
+
+        return self.cards.pop()
+
+    def Length_Check(self):
+
+        return len(self.cards)
+
+    def Copy(self):
+        """ Copy's self with newly generated list to prevent accidental editing.
+        Returns Stack object"""
+
+        copy_cards = []
+
+        for card in self.cards:
+
+            copy_cards.append(card)
+
+        return Stack(copy_cards, self.hidden)
+
 class Deck(object):
     """ Contains a list of cards and methods to randomly return cards from said list. """
 
-    def __init__(self, num_suit):
+    def __init__(self, num_suit, seed=0):
         """ Assumes num_suit is int.
         Generates cards as a tuple of int Card Number and string Suit"""
         
-        self.cards = []
         self.num_suit = num_suit
+        self.seed = seed
+        self.cards = []
 
         if num_suit == 1:
 
@@ -208,14 +247,18 @@ class Deck(object):
         return cards
 
 
-    def Deal(self, num_cards, seed=-1):
+    def Deal(self, num_cards):
         """ Assumes num_cards is int
         Pops a number of cards randomly picked off own list
         Returns those cards as list"""
 
-        if seed != -1:
+        if self.seed != 0:
             
-            random.seed(seed)
+            random.seed(self.seed)
+
+        else:
+
+            random.seed(None)
 
         cards = []
 
@@ -232,18 +275,61 @@ class Deck(object):
 class Table(object):
     """ Contains a list of stacks and a Deck, performs operations to play the game. """
 
-    def __init__(self, num_suit):
+    def __init__(self, num_suit, seed=0):
         """ Assumes num_suit is int
         Generates Deck and then list of Stacks off num_suit"""
 
         self.num_suit = num_suit
-        self.deck = Deck(num_suit)
-        self.stacks = []
+        self.deck = Deck(num_suit, seed)
+        self.stacks = {}
+
+        i = 0
+        while i < 4:
+
+            self.stacks["H"+str(i)] = Stack(self.deck.Deal(5), True)
+            self.stacks["O"+str(i)] = Stack(self.deck.Deal(1))
+            i += 1
+
+        while i < 10:
+
+            self.stacks["H"+str(i)] = Stack(self.deck.Deal(4), True)
+            self.stacks["O"+str(i)] = Stack(self.deck.Deal(1))
+            i += 1
 
     def Spider_Deal(self):
         """ Calls Deck.Deal for each stack on the table
         Raises stack_empty if a stack is empty
         Returns none """
 
-        #TODO: Table.Spider_Deal
-        pass
+        for stack in self.stacks.values():
+
+            if not stack.hidden:
+
+                if stack.Length_Check() > 0:
+                    
+                    stack.Add_Card(self.deck.Deal(1).pop())
+
+                else:
+
+                    raise StackEmptyError("Cannot deal card to empty stack")
+
+    def Move(self, stack_1_number, stack_2_number):
+        """ Attempts to move cards from stack_1 to stack_2.
+        Takes in two strings, expects they are the number of the stack.
+        """
+
+        stack_1 = self.stacks["O" + stack_1_number].Copy()
+        stack_2 = self.stacks["O" + stack_2_number].Copy()
+
+        cards = stack_1.Pull()
+            
+        stack_2.Place(cards)
+
+        self.stacks["O" + stack_1_number] = stack_1.Copy()
+        self.stacks["O" + stack_2_number] = stack_2.Copy()
+
+        if stack_1.Length_Check() == 0:
+
+            card = self.stacks["H" + stack_1_number].Pop_Card()
+
+            self.stacks["O" + stack_1_number].Add_Card(card)
