@@ -2,10 +2,11 @@
 A spider solitaire simulator that will be able to run tests on "Rules", telling you which rules to abide by while playing to ensure most
 likely victory.
 
+
 So far the Simulator portion and acompanying tests are complete. While it doesn't print to console, or have any UI,
 all that is contained in the Spider_Sim.py file can be used as a backend to create a fully playable single suit Spider Solitaire program. 
 
-Next steps are:
+<b>Next steps are:</b>
 
 Finish implimentations in Spider_Sim.py that allows for cross suit moves.
 
