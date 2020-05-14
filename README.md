@@ -8,8 +8,6 @@ all that is contained in the Spider_Sim.py file can be used as a backend to crea
 
 <b>Next steps are:</b>
 
-Finish implimentations in Spider_Sim.py that allows for cross suit moves.
-
 Impliment main method in Spider_Sim.py that "runs" a spider solitare game.
 
 Create Spider_Rules.py which will contain statistical tests to run against the Spider_Sim.py program, logging info to
